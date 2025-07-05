@@ -176,17 +176,27 @@ const Subtitle = styled(motion.p)`
   font-size: 1.5rem;
   margin-bottom: 2rem;
   color: white;
-  max-width: 600px;
+  max-width: 900px;
   line-height: 1.8;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
   background: rgba(0, 0, 0, 0.3);
   padding: 15px 20px;
   border-radius: 10px;
   backdrop-filter: blur(5px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   @media (max-width: 768px) {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     padding: 12px 16px;
+    white-space: normal;
+    max-width: 95%;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 1rem;
+    padding: 10px 14px;
   }
 `;
 
@@ -357,7 +367,7 @@ const HeroSection: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 1.4 }}
         >
-          伝統と現代が交差する秋田県を舞台にKitazuna'sと共に巡るローカルスペクタクルストーリー
+          伝統と現代が交差する秋田県を舞台に杉野健太が秋田名物Kitazuna'sとのたちとの一大スペクタクル！
         </Subtitle>
         
         <CTAButton
