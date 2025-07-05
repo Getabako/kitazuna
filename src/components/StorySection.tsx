@@ -85,7 +85,9 @@ const BookCover = styled.div`
   box-shadow: 
     0 20px 40px rgba(0, 0, 0, 0.4),
     inset 0 2px 10px rgba(255, 255, 255, 0.1);
-  z-index: 1;
+  z-index: 0;
+  opacity: 0;
+  pointer-events: none;
   
   &::before {
     content: '';
@@ -165,6 +167,7 @@ const Page = styled(motion.div)<{ $isLeft?: boolean }>`
     };
   overflow: hidden;
   transform-origin: ${props => props.$isLeft ? 'right center' : 'left center'};
+  backface-visibility: hidden;
   
   &::before {
     content: '';
@@ -544,39 +547,39 @@ const StorySection: React.FC = () => {
           <BookSpine />
           
           <AnimatePresence mode="wait">
-            <Page 
-              $isLeft={true}
-              key={`left-${currentPage}`}
-              initial={{ rotateY: -25, opacity: 0 }}
-              animate={{ rotateY: 0, opacity: 1 }}
-              exit={{ rotateY: 25, opacity: 0 }}
-              transition={{ duration: 0.8, ease: "easeInOut" }}
-            >
-              <ChapterNumber>{currentChapter.number}</ChapterNumber>
-              <ChapterTitle>{currentChapter.title}</ChapterTitle>
-              <ChapterDescription>{currentChapter.description}</ChapterDescription>
-              <TeaseText>{currentChapter.teaseText}</TeaseText>
-            </Page>
+            <motion.div key={`pages-${currentPage}`}>
+              <Page 
+                $isLeft={true}
+                initial={{ rotateY: -30, opacity: 0 }}
+                animate={{ rotateY: 0, opacity: 1 }}
+                exit={{ rotateY: 30, opacity: 0 }}
+                transition={{ duration: 0.6, ease: "easeInOut" }}
+              >
+                <ChapterNumber>{currentChapter.number}</ChapterNumber>
+                <ChapterTitle>{currentChapter.title}</ChapterTitle>
+                <ChapterDescription>{currentChapter.description}</ChapterDescription>
+                <TeaseText>{currentChapter.teaseText}</TeaseText>
+              </Page>
 
-            <Page 
-              $isLeft={false}
-              key={`right-${currentPage}`}
-              initial={{ rotateY: 25, opacity: 0 }}
-              animate={{ rotateY: 0, opacity: 1 }}
-              exit={{ rotateY: -25, opacity: 0 }}
-              transition={{ duration: 0.8, ease: "easeInOut", delay: 0.1 }}
-            >
-              <ChapterImage 
-                src={currentChapter.sceneImage}
-                alt={currentChapter.sceneAlt}
-                loading="lazy"
-              />
-              <CharacterPortrait
-                src={currentChapter.characterImage} 
-                alt={currentChapter.characterAlt}
-                loading="lazy"
-              />
-            </Page>
+              <Page 
+                $isLeft={false}
+                initial={{ rotateY: 30, opacity: 0 }}
+                animate={{ rotateY: 0, opacity: 1 }}
+                exit={{ rotateY: -30, opacity: 0 }}
+                transition={{ duration: 0.6, ease: "easeInOut" }}
+              >
+                <ChapterImage 
+                  src={currentChapter.sceneImage}
+                  alt={currentChapter.sceneAlt}
+                  loading="lazy"
+                />
+                <CharacterPortrait
+                  src={currentChapter.characterImage} 
+                  alt={currentChapter.characterAlt}
+                  loading="lazy"
+                />
+              </Page>
+            </motion.div>
           </AnimatePresence>
         </PageContainer>
 
