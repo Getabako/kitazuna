@@ -1,13 +1,45 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
+import React, { useState, useEffect } from 'react';
+import styled, { keyframes } from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
+
+const sparkle = keyframes`
+  0%, 100% { transform: scale(0.8) rotate(0deg); opacity: 0.6; }
+  50% { transform: scale(1.2) rotate(180deg); opacity: 1; }
+`;
+
+const float = keyframes`
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+`;
+
+const CardShuffleIn = {
+  initial: { rotateY: -90, opacity: 0, scale: 0.8, z: -200 },
+  animate: { rotateY: 0, opacity: 1, scale: 1, z: 0 },
+  exit: { rotateY: 90, opacity: 0, scale: 0.8, z: -200 }
+};
 
 const CharacterContainer = styled.section`
   min-height: 100vh;
-  padding: 5rem 2rem;
-  background: linear-gradient(135deg, #16213e 0%, #0f3460 100%);
+  padding: 4rem 2rem;
+  background: 
+    radial-gradient(ellipse at top, rgba(30, 144, 255, 0.2) 0%, transparent 60%),
+    linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%);
   color: white;
   position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      radial-gradient(circle at 20% 30%, rgba(30, 144, 255, 0.1) 0%, transparent 25%),
+      radial-gradient(circle at 80% 70%, rgba(255, 215, 0, 0.1) 0%, transparent 25%);
+    pointer-events: none;
+  }
 `;
 
 const SectionTitle = styled(motion.h2)`
@@ -24,39 +56,151 @@ const SectionTitle = styled(motion.h2)`
   }
 `;
 
-const CharacterGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  max-width: 1400px;
+const CardGameContainer = styled.div`
+  max-width: 1200px;
   margin: 0 auto;
-`;
-
-const CharacterCard = styled(motion.div)`
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
-  overflow: hidden;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  cursor: pointer;
-  transition: all 0.3s ease;
   position: relative;
-
-  &:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 40px rgba(255, 107, 107, 0.3);
-  }
-`;
-
-const CharacterImage = styled.div<{ $bgColor: string }>`
-  height: 200px;
-  background: ${props => props.$bgColor};
+  height: 600px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 4rem;
+  perspective: 1500px;
+  
+  @media (max-width: 768px) {
+    height: 500px;
+  }
+`;
+
+const PokemonCard = styled(motion.div)<{ $position: 'left' | 'center' | 'right' }>`
+  position: absolute;
+  width: 280px;
+  height: 400px;
+  background: 
+    linear-gradient(145deg, #1e3a8a 0%, #1e40af 50%, #2563eb 100%);
+  border-radius: 20px;
+  border: 4px solid #ffd700;
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.4),
+    inset 0 2px 10px rgba(255, 255, 255, 0.2),
+    0 0 20px rgba(255, 215, 0, 0.3);
+  cursor: pointer;
+  transform-style: preserve-3d;
+  overflow: hidden;
+  
+  ${props => {
+    switch (props.$position) {
+      case 'left':
+        return `
+          left: -100px;
+          z-index: 1;
+          transform: rotateY(25deg) scale(0.85);
+          opacity: 0.7;
+        `;
+      case 'center':
+        return `
+          left: 50%;
+          transform: translateX(-50%) scale(1.1);
+          z-index: 3;
+          animation: ${float} 3s ease-in-out infinite;
+        `;
+      case 'right':
+        return `
+          right: -100px;
+          z-index: 1;
+          transform: rotateY(-25deg) scale(0.85);
+          opacity: 0.7;
+        `;
+    }
+  }}
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.2) 0%, transparent 30%),
+      radial-gradient(circle at 70% 80%, rgba(255, 215, 0, 0.1) 0%, transparent 40%);
+    pointer-events: none;
+    z-index: 1;
+  }
+  
+  &:hover {
+    transform: ${props => props.$position === 'center' ? 'translateX(-50%) scale(1.15)' : 
+      props.$position === 'left' ? 'rotateY(15deg) scale(0.9)' : 'rotateY(-15deg) scale(0.9)'};
+    box-shadow: 
+      0 25px 50px rgba(0, 0, 0, 0.5),
+      inset 0 2px 10px rgba(255, 255, 255, 0.3),
+      0 0 30px rgba(255, 215, 0, 0.5);
+  }
+  
+  @media (max-width: 768px) {
+    width: 220px;
+    height: 320px;
+    
+    ${props => {
+      switch (props.$position) {
+        case 'left':
+          return 'left: -80px; transform: rotateY(30deg) scale(0.8);';
+        case 'center':
+          return 'transform: translateX(-50%) scale(1);';
+        case 'right':
+          return 'right: -80px; transform: rotateY(-30deg) scale(0.8);';
+      }
+    }}
+  }
+`;
+
+const CardHeader = styled.div`
+  height: 80px;
+  background: linear-gradient(135deg, #ffd700, #ffed4e);
+  padding: 1rem;
+  position: relative;
+  z-index: 2;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #ff6b6b, transparent);
+  }
+`;
+
+const CardTitle = styled.h3`
+  color: #1a1a2e;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
+  margin: 0;
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+  
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
+`;
+
+const CardImageArea = styled.div<{ $bgColor: string }>`
+  height: 180px;
+  background: ${props => props.$bgColor};
+  margin: 10px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
   overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.2);
+  
+  @media (max-width: 768px) {
+    height: 140px;
+    margin: 8px;
+  }
 `;
 
 const CharacterPortrait = styled.img`
@@ -66,53 +210,84 @@ const CharacterPortrait = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.7;
+  opacity: 0.8;
   z-index: 1;
+  filter: brightness(1.1) contrast(1.1);
 `;
 
 const CharacterEmoji = styled.div`
   position: relative;
   z-index: 2;
-  font-size: 4rem;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  font-size: 3.5rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  animation: ${sparkle} 2s ease-in-out infinite;
+  
+  @media (max-width: 768px) {
+    font-size: 2.5rem;
+  }
 `;
 
-const CharacterInfo = styled.div`
-  padding: 1.5rem;
+const CardInfo = styled.div`
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 0 0 16px 16px;
+  position: relative;
+  z-index: 2;
+  height: 130px;
+  
+  @media (max-width: 768px) {
+    padding: 0.8rem;
+    height: 110px;
+  }
 `;
 
-const CharacterName = styled.h3`
-  font-size: 1.5rem;
-  margin-bottom: 0.5rem;
-  color: #ffd700;
-`;
 
 const CharacterRole = styled.p`
   color: #ff6b6b;
   font-weight: bold;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.8rem;
+  text-align: center;
+  
+  @media (max-width: 768px) {
+    font-size: 0.7rem;
+  }
 `;
 
 const CharacterDescription = styled.p`
   color: #e0e0e0;
-  line-height: 1.6;
-  font-size: 0.9rem;
+  line-height: 1.4;
+  font-size: 0.75rem;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  
+  @media (max-width: 768px) {
+    font-size: 0.7rem;
+    line-height: 1.3;
+  }
 `;
 
 const CharacterTags = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 1rem;
+  gap: 0.3rem;
+  justify-content: center;
+  margin-top: 0.5rem;
 `;
 
 const Tag = styled.span`
-  background: rgba(255, 215, 0, 0.2);
-  padding: 0.3rem 0.8rem;
-  border-radius: 15px;
-  font-size: 0.7rem;
+  background: rgba(255, 215, 0, 0.3);
+  padding: 0.2rem 0.5rem;
+  border-radius: 10px;
+  font-size: 0.6rem;
   color: #ffd700;
-  border: 1px solid rgba(255, 215, 0, 0.3);
+  border: 1px solid rgba(255, 215, 0, 0.5);
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.8);
+  
+  @media (max-width: 768px) {
+    font-size: 0.55rem;
+    padding: 0.15rem 0.4rem;
+  }
 `;
 
 const CharacterModal = styled(motion.div)`
@@ -204,8 +379,64 @@ interface Character {
   imageRandom: number;
 }
 
+const NavigationControls = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  margin-top: 3rem;
+`;
+
+const NavButton = styled(motion.button)`
+  width: 60px;
+  height: 60px;
+  border: 3px solid #ffd700;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #1e40af, #2563eb);
+  color: #ffd700;
+  font-size: 1.5rem;
+  cursor: pointer;
+  box-shadow: 
+    0 4px 8px rgba(0, 0, 0, 0.3),
+    inset 0 2px 4px rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    box-shadow: 
+      0 6px 12px rgba(0, 0, 0, 0.4),
+      inset 0 2px 4px rgba(255, 255, 255, 0.3);
+  }
+  
+  &:active {
+    transform: translateY(2px);
+  }
+`;
+
+const CardIndicators = styled.div`
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+`;
+
+const Indicator = styled(motion.div)<{ $isActive: boolean }>`
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: ${props => props.$isActive ? '#ffd700' : 'rgba(255, 215, 0, 0.3)'};
+  border: 2px solid #ffd700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: scale(1.2);
+  }
+`;
+
 const CharacterSection: React.FC = () => {
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isAutoPlay, setIsAutoPlay] = useState(true);
+
 
   const characters: Character[] = [
     {
@@ -301,6 +532,26 @@ const CharacterSection: React.FC = () => {
     }
   ];
 
+  useEffect(() => {
+    if (!isAutoPlay) return;
+    
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % characters.length);
+    }, 4000);
+    
+    return () => clearInterval(interval);
+  }, [isAutoPlay, characters.length]);
+
+  const nextCard = () => {
+    setIsAutoPlay(false);
+    setCurrentIndex((prev) => (prev + 1) % characters.length);
+  };
+
+  const prevCard = () => {
+    setIsAutoPlay(false);
+    setCurrentIndex((prev) => (prev - 1 + characters.length) % characters.length);
+  };
+
   return (
     <CharacterContainer id="character-section">
       <SectionTitle
@@ -309,42 +560,82 @@ const CharacterSection: React.FC = () => {
         transition={{ duration: 0.8 }}
         viewport={{ once: true }}
       >
-        物語を彩る仲間たち
+        秋田名物Kitazuna's
       </SectionTitle>
 
-      <CharacterGrid>
-        {characters.map((character, index) => (
-          <CharacterCard
-            key={character.id}
-            onClick={() => setSelectedCharacter(character)}
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: index * 0.1 }}
-            viewport={{ once: true }}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <CharacterImage $bgColor={character.bgColor}>
-              <CharacterPortrait
-                src={`https://picsum.photos/300/200?random=${character.imageRandom}`}
-                alt={`KITAZUNAキャラクター ${character.name}のポートレート - 日本の秋田県をテーマにした${character.name === 'ナギサ' ? '男鹿半島のナマハゲ伝統を継承する勇敢な女性キャラクター、日本の民俗文化と性別平等をテーマにしたデザイン' : character.name === 'コマチ' ? '平安時代の美意識を現代に伝える小野小町モチーフのキャラクター、日本の古典文化とSNS時代を融合したデザイン' : character.name === 'イナニワ' ? '秋田の稲庭うどん職人をモデルにした伝統技術者キャラクター、日本の職人文化と家族の絆をテーマにしたデザイン' : character.name === 'カント' ? '革新的な竿燈士として描かれた若者キャラクター、日本の伝統祭りと世代継承をテーマにしたデザイン' : character.name === '海風源三郎' ? '冒険家の戦友として描かれた頼れる案内人キャラクター、日本の人生哲学と地域知識をテーマにしたデザイン' : '現代の大学生から冒険者へと成長する主人公キャラクター、日本の若者の成長と地域への愛着をテーマにしたデザイン'}、緒方孝治氏のレトロゲーム風キャラクターアート`}
-                loading="lazy"
-              />
-              <CharacterEmoji>{character.emoji}</CharacterEmoji>
-            </CharacterImage>
-            <CharacterInfo>
-              <CharacterName>{character.name}</CharacterName>
-              <CharacterRole>{character.role}</CharacterRole>
-              <CharacterDescription>{character.description}</CharacterDescription>
-              <CharacterTags>
-                {character.tags.map((tag, tagIndex) => (
-                  <Tag key={tagIndex}>{tag}</Tag>
-                ))}
-              </CharacterTags>
-            </CharacterInfo>
-          </CharacterCard>
-        ))}
-      </CharacterGrid>
+      <CardGameContainer>
+        <AnimatePresence mode="wait">
+          {[-1, 0, 1].map((offset) => {
+            const cardIndex = (currentIndex + offset + characters.length) % characters.length;
+            const character = characters[cardIndex];
+            const position = offset === -1 ? 'left' : offset === 0 ? 'center' : 'right';
+            
+            return (
+              <PokemonCard
+                key={`${character.id}-${currentIndex}`}
+                $position={position}
+                {...CardShuffleIn}
+                transition={{ duration: 0.6, ease: "easeInOut" }}
+                onClick={() => position === 'center' && setSelectedCharacter(character)}
+                whileHover={{ scale: position === 'center' ? 1.15 : 0.9 }}
+                whileTap={{ scale: position === 'center' ? 1.05 : 0.85 }}
+              >
+                <CardHeader>
+                  <CardTitle>{character.name}</CardTitle>
+                </CardHeader>
+                
+                <CardImageArea $bgColor={character.bgColor}>
+                  <CharacterPortrait
+                    src={`https://picsum.photos/300/200?random=${character.imageRandom}`}
+                    alt={`KITAZUNA's ${character.name}`}
+                    loading="lazy"
+                  />
+                  <CharacterEmoji>{character.emoji}</CharacterEmoji>
+                </CardImageArea>
+                
+                <CardInfo>
+                  <CharacterRole>{character.role}</CharacterRole>
+                  <CharacterDescription>{character.description}</CharacterDescription>
+                  <CharacterTags>
+                    {character.tags.slice(0, 3).map((tag, tagIndex) => (
+                      <Tag key={tagIndex}>{tag}</Tag>
+                    ))}
+                  </CharacterTags>
+                </CardInfo>
+              </PokemonCard>
+            );
+          })}
+        </AnimatePresence>
+      </CardGameContainer>
+      
+      <NavigationControls>
+        <NavButton 
+          onClick={prevCard}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+        >
+          ←
+        </NavButton>
+        
+        <CardIndicators>
+          {characters.map((_, index) => (
+            <Indicator
+              key={index}
+              $isActive={index === currentIndex}
+              onClick={() => setCurrentIndex(index)}
+              whileHover={{ scale: 1.2 }}
+            />
+          ))}
+        </CardIndicators>
+        
+        <NavButton 
+          onClick={nextCard}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+        >
+          →
+        </NavButton>
+      </NavigationControls>
 
       <DesignerCredit>
         <DesignerTitle>キャラクターデザイン</DesignerTitle>
