@@ -311,7 +311,7 @@ const HeroSection: React.FC = () => {
       <VideoOverlay />
       
       <Logo
-        src="/logo.png"
+        src="/images/kitazunalogo.png"
         alt="Kitazuna ロゴ"
         initial={{ opacity: 0, x: -50 }}
         animate={{ opacity: 1, x: 0 }}
