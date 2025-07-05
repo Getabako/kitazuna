@@ -1,92 +1,24 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
+
+const float = keyframes`
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
+`;
+
+const shimmer = keyframes`
+  0% { background-position: -200px 0; }
+  100% { background-position: calc(200px + 100%) 0; }
+`;
 
 const StoryContainer = styled.section`
   min-height: 100vh;
   padding: 5rem 2rem;
-  background: linear-gradient(135deg, #0f3460 0%, #1a1a2e 100%);
-  color: white;
-  position: relative;
-`;
-
-const SectionTitle = styled(motion.h2)`
-  font-size: 3rem;
-  text-align: center;
-  margin-bottom: 3rem;
-  background: linear-gradient(45deg, #4ecdc4, #45b7d1);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  
-  @media (max-width: 768px) {
-    font-size: 2rem;
-  }
-`;
-
-const StoryTimeline = styled.div`
-  max-width: 1200px;
-  margin: 0 auto;
-  position: relative;
-`;
-
-const TimelineTrack = styled.div`
-  position: absolute;
-  left: 50%;
-  top: 0;
-  bottom: 0;
-  width: 4px;
-  background: linear-gradient(180deg, #4ecdc4, #45b7d1);
-  transform: translateX(-50%);
-  
-  @media (max-width: 768px) {
-    left: 30px;
-  }
-`;
-
-const ChapterCard = styled(motion.div)<{ $isActive: boolean; $side: 'left' | 'right' }>`
-  display: flex;
-  align-items: center;
-  margin-bottom: 4rem;
-  flex-direction: ${props => props.$side === 'left' ? 'row' : 'row-reverse'};
-  
-  @media (max-width: 768px) {
-    flex-direction: row;
-    margin-left: 60px;
-  }
-`;
-
-const ChapterContent = styled(motion.div)<{ $side: 'left' | 'right' }>`
-  flex: 1;
-  background: rgba(255, 255, 255, 0.1);
-  padding: 2rem;
-  border-radius: 20px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  margin: ${props => props.$side === 'left' ? '0 2rem 0 0' : '0 0 0 2rem'};
-  cursor: pointer;
-  transition: all 0.3s ease;
-  
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 30px rgba(78, 205, 196, 0.3);
-  }
-  
-  @media (max-width: 768px) {
-    margin: 0 0 0 2rem;
-  }
-`;
-
-const ChapterIcon = styled(motion.div)`
-  width: 80px;
-  height: 80px;
-  background: linear-gradient(135deg, #4ecdc4, #45b7d1);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2rem;
-  z-index: 2;
+  background: 
+    radial-gradient(ellipse at top, rgba(139, 69, 19, 0.1) 0%, transparent 50%),
+    linear-gradient(135deg, #2c1810 0%, #1a0f0a 100%);
+  color: #8b4513;
   position: relative;
   overflow: hidden;
 
@@ -97,22 +29,231 @@ const ChapterIcon = styled(motion.div)`
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: url('https://picsum.photos/100/100?random=20');
-    background-size: cover;
-    background-position: center;
-    opacity: 0.3;
-    z-index: 1;
+    background-image: 
+      radial-gradient(circle at 20% 80%, rgba(139, 69, 19, 0.1) 0%, transparent 30%),
+      radial-gradient(circle at 80% 20%, rgba(139, 69, 19, 0.05) 0%, transparent 30%);
+    pointer-events: none;
   }
+`;
 
-  & > * {
-    position: relative;
-    z-index: 2;
+const SectionTitle = styled(motion.h2)`
+  font-size: 3.5rem;
+  text-align: center;
+  margin-bottom: 4rem;
+  font-family: 'Cinzel', serif;
+  background: linear-gradient(45deg, #d4af37, #b8860b, #cd853f);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 2px 2px 4px rgba(139, 69, 19, 0.3);
+  position: relative;
+  
+  &::after {
+    content: '✦ ◆ ✦';
+    display: block;
+    font-size: 1.5rem;
+    margin-top: 1rem;
+    color: #cd853f;
+    opacity: 0.7;
   }
   
   @media (max-width: 768px) {
-    width: 60px;
-    height: 60px;
-    font-size: 1.5rem;
+    font-size: 2.5rem;
+  }
+`;
+
+const BookContainer = styled(motion.div)`
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  perspective: 1000px;
+`;
+
+const BookSpine = styled.div`
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(180deg, #8b4513, #654321);
+  transform: translateX(-50%);
+  z-index: 10;
+  box-shadow: 
+    -2px 0 4px rgba(0, 0, 0, 0.3),
+    2px 0 4px rgba(0, 0, 0, 0.3);
+`;
+
+const PageContainer = styled(motion.div)`
+  position: relative;
+  width: 100%;
+  height: 600px;
+  margin: 0 auto;
+  transform-style: preserve-3d;
+  
+  @media (max-width: 768px) {
+    height: 500px;
+  }
+`;
+
+const Page = styled(motion.div)<{ $isLeft?: boolean }>`
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  ${props => props.$isLeft ? 'left: 0;' : 'right: 0;'}
+  background: 
+    linear-gradient(135deg, #f4f1e8 0%, #ede5d3 50%, #e6dcc7 100%);
+  border: 3px solid #d4af37;
+  border-radius: ${props => props.$isLeft ? '15px 5px 5px 15px' : '5px 15px 15px 5px'};
+  padding: 2rem;
+  box-shadow: 
+    ${props => props.$isLeft ? 
+      'inset -5px 0 10px rgba(139, 69, 19, 0.1), -5px 5px 15px rgba(0, 0, 0, 0.2)' : 
+      'inset 5px 0 10px rgba(139, 69, 19, 0.1), 5px 5px 15px rgba(0, 0, 0, 0.2)'
+    };
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      radial-gradient(circle at 30% 20%, rgba(139, 69, 19, 0.05) 0%, transparent 20%),
+      radial-gradient(circle at 70% 80%, rgba(139, 69, 19, 0.03) 0%, transparent 15%),
+      linear-gradient(45deg, transparent 49%, rgba(139, 69, 19, 0.02) 50%, transparent 51%);
+    pointer-events: none;
+  }
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    bottom: 20px;
+    border: 1px solid rgba(139, 69, 19, 0.2);
+    border-radius: 5px;
+    pointer-events: none;
+  }
+  
+  @media (max-width: 768px) {
+    width: 100%;
+    ${props => props.$isLeft ? 'right: 0; left: auto;' : ''}
+    border-radius: 15px;
+    margin-bottom: ${props => props.$isLeft ? '2rem' : '0'};
+    height: ${props => props.$isLeft ? '45%' : '45%'};
+    ${props => props.$isLeft ? 'top: 0;' : 'bottom: 0;'}
+  }
+`;
+
+const ChapterNumber = styled.div`
+  font-size: 4rem;
+  font-family: 'Cinzel', serif;
+  color: #cd853f;
+  text-align: center;
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 4px rgba(139, 69, 19, 0.3);
+  position: relative;
+  
+  &::before {
+    content: '〜';
+    position: absolute;
+    left: -2rem;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  &::after {
+    content: '〜';
+    position: absolute;
+    right: -2rem;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+`;
+
+const ChapterTitle = styled.h3`
+  font-size: 1.8rem;
+  color: #8b4513;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-family: 'Cinzel', serif;
+  position: relative;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #cd853f, transparent);
+  }
+  
+  @media (max-width: 768px) {
+    font-size: 1.4rem;
+  }
+`;
+
+const ChapterDescription = styled.p`
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #654321;
+  text-align: justify;
+  font-family: 'Crimson Text', serif;
+  position: relative;
+  
+  &::first-letter {
+    float: left;
+    font-size: 4rem;
+    line-height: 3rem;
+    padding-right: 8px;
+    margin-top: 4px;
+    font-family: 'Cinzel', serif;
+    color: #cd853f;
+    text-shadow: 2px 2px 4px rgba(139, 69, 19, 0.3);
+  }
+  
+  @media (max-width: 768px) {
+    font-size: 1rem;
+    
+    &::first-letter {
+      font-size: 3rem;
+      line-height: 2.5rem;
+    }
+  }
+`;
+
+const TeaseText = styled.div`
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: rgba(212, 175, 55, 0.1);
+  border-left: 4px solid #cd853f;
+  font-style: italic;
+  color: #8b4513;
+  border-radius: 0 5px 5px 0;
+  
+  &::before {
+    content: '"';
+    font-size: 2rem;
+    color: #cd853f;
+    font-family: 'Cinzel', serif;
+    float: left;
+    line-height: 1;
+    margin-right: 5px;
+  }
+  
+  &::after {
+    content: '"';
+    font-size: 2rem;
+    color: #cd853f;
+    font-family: 'Cinzel', serif;
+    float: right;
+    line-height: 1;
+    margin-left: 5px;
   }
 `;
 
@@ -120,148 +261,187 @@ const ChapterImage = styled.img`
   width: 100%;
   height: 200px;
   object-fit: cover;
-  border-radius: 15px;
+  border-radius: 10px;
+  border: 3px solid #d4af37;
+  box-shadow: 0 5px 15px rgba(139, 69, 19, 0.3);
   margin-bottom: 1rem;
+  filter: sepia(20%) contrast(1.1);
 `;
 
-const ChapterTitle = styled.h3`
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-  color: #4ecdc4;
+const CharacterPortrait = styled.img`
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 4px solid #cd853f;
+  object-fit: cover;
+  margin: 1rem auto;
+  display: block;
+  box-shadow: 0 8px 16px rgba(139, 69, 19, 0.4);
+  filter: sepia(10%);
 `;
 
-const ChapterDescription = styled.p`
-  line-height: 1.6;
-  color: #e0e0e0;
-  margin-bottom: 1rem;
-`;
-
-const ChapterTags = styled.div`
+const NavigationContainer = styled.div`
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-`;
-
-const Tag = styled.span`
-  background: rgba(78, 205, 196, 0.2);
-  padding: 0.3rem 0.8rem;
-  border-radius: 15px;
-  font-size: 0.8rem;
-  color: #4ecdc4;
-  border: 1px solid rgba(78, 205, 196, 0.3);
-`;
-
-const DetailModal = styled(motion.div)`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.8);
-  display: flex;
-  align-items: center;
   justify-content: center;
-  z-index: 1000;
-  padding: 2rem;
+  align-items: center;
+  gap: 2rem;
+  margin-top: 3rem;
 `;
 
-const ModalContent = styled(motion.div)`
-  background: linear-gradient(135deg, #1a1a2e, #16213e);
-  padding: 3rem;
-  border-radius: 20px;
-  max-width: 800px;
-  width: 100%;
-  max-height: 80vh;
-  overflow-y: auto;
-  position: relative;
-`;
-
-const CloseButton = styled.button`
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: none;
-  border: none;
-  color: white;
+const NavButton = styled(motion.button)<{ $direction: 'prev' | 'next' }>`
+  width: 60px;
+  height: 60px;
+  border: 3px solid #cd853f;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #f4f1e8, #e6dcc7);
+  color: #8b4513;
   font-size: 1.5rem;
   cursor: pointer;
-  padding: 0.5rem;
-  border-radius: 50%;
-  transition: background 0.3s ease;
+  box-shadow: 
+    0 4px 8px rgba(139, 69, 19, 0.3),
+    inset 0 2px 4px rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
   
   &:hover {
-    background: rgba(255, 255, 255, 0.1);
+    animation: ${float} 1s ease-in-out infinite;
+    box-shadow: 
+      0 6px 12px rgba(139, 69, 19, 0.4),
+      inset 0 2px 4px rgba(255, 255, 255, 0.3);
+  }
+  
+  &:active {
+    transform: translateY(2px);
+    box-shadow: 
+      0 2px 4px rgba(139, 69, 19, 0.3),
+      inset 0 2px 4px rgba(139, 69, 19, 0.2);
+  }
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+`;
+
+const PageIndicator = styled.div`
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+`;
+
+const PageDot = styled(motion.div)<{ $isActive: boolean }>`
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: ${props => props.$isActive ? '#cd853f' : 'rgba(139, 69, 19, 0.3)'};
+  border: 2px solid #8b4513;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: scale(1.2);
   }
 `;
 
 const StorySection: React.FC = () => {
-  const [activeChapter, setActiveChapter] = useState<number | null>(null);
+  const [currentPage, setCurrentPage] = useState(0);
 
   const chapters = [
     {
       id: 1,
-      icon: '🚄',
-      title: 'オープニング - 新幹線での導入',
-      description: '平凡な大学生・杉野健太が新幹線で秋田へ。祖父の緊急依頼で「魂の提灯」を集める冒険の始まり。',
-      tags: ['導入', '世界観', '秋田'],
-      detail: '内向的な大学生の健太が、冒険家の祖父・杉野雅弘から突然の依頼を受けて秋田へ向かいます。「スギノオウ」という秋田県民の過度な真面目さが生んだ化身の復活を阻止するため、「魂の提灯」を集める使命を背負うことになります。平凡だった青年が、故郷の秋田で本当の自分を見つけていく物語の始まりです。',
-      imageRandom: 21
+      number: "第一章",
+      title: "新幹線での邂逅",
+      description: "平凡な大学生・杉野健太が、祖父からの謎めいた依頼を受けて秋田へと向かう。車窓に流れる風景を眺めながら、彼はまだ知らない。この旅が、自分の人生を大きく変える冒険の始まりであることを...",
+      teaseText: "果たして健太を待ち受ける運命とは？この旅の真の目的とは何なのか？",
+      sceneImage: "https://picsum.photos/400/200?random=101",
+      sceneAlt: "新幹線の車窓から見える秋田の美しい田園風景、健太が物思いにふけりながら故郷への思いを馳せている様子",
+      characterImage: "https://picsum.photos/150/150?random=201",
+      characterAlt: "主人公・杉野健太の肖像、内向的だが決意を秘めた表情の大学生"
     },
     {
       id: 2,
-      icon: '👹',
-      title: '男鹿編 - ナマハゲの祠での試練',
-      description: '女性のナギサがナマハゲの精神を証明。性別の壁を越えた真の強さとは何かを問う物語。',
-      tags: ['ナマハゲ', '性別平等', '伝統'],
-      detail: '祖父の戦友・源三郎の案内で、ナマハゲの祠を目指します。女性であることを理由にナマハゲになることを諦めていたナギサが、真のナマハゲ精神を証明します。青いナマハゲが実は女性だったという真実と共に、性別による制約が人間が勝手に決めたものであることを学び、真の精神的資質は外見や属性を超越することを知ります。',
-      imageRandom: 22
+      number: "第二章", 
+      title: "男鹿の守護霊",
+      description: "男鹿半島で出会った勇敢な少女ナギサ。彼女には秘められた願いがあった。古くからの伝統に挑戦する彼女の姿に、健太は心を揺さぶられる。神秘的なナマハゲの祠で、二人が目にしたものとは...",
+      teaseText: "伝統の壁を越えて、ナギサの願いは叶うのか？祠に隠された秘密とは？",
+      sceneImage: "https://picsum.photos/400/200?random=102",
+      sceneAlt: "夕暮れの男鹿半島、神秘的なナマハゲの祠と海岸線、古い伝統の重みを感じさせる厳かな雰囲気",
+      characterImage: "https://picsum.photos/150/150?random=202",
+      characterAlt: "ナギサの肖像、ナマハゲの面を持ち決意に満ちた表情を見せる勇敢な少女"
     },
     {
       id: 3,
-      icon: '💄',
-      title: '湯沢編 - コマチとSNS活用',
-      description: '小野小町の化身コマチが現代のSNSに挑戦。伝統的価値を現代に発信する革新的な取り組み。',
-      tags: ['SNS', 'デジタル', '伝統継承'],
-      detail: '平安時代から続く知識を持つコマチが、現代社会での居場所を失い孤独感を抱えています。ナギサの提案でSNSを活用し、「平安美人」としてのブランドを確立。短期間で1,000人のフォロワーを獲得し、伝統と現代技術の融合に成功します。古い価値観と新しい技術の調和を描いた感動的な物語です。',
-      imageRandom: 23
+      number: "第三章",
+      title: "湯沢の雅な出会い",
+      description: "骨董品店で出会った謎めいた美女コマチ。平安時代から続く美の知識を持つ彼女は、現代社会で孤独を感じていた。しかし、ナギサの提案により、古き良きものと新しい技術が織りなす奇跡が...",
+      teaseText: "千年の美意識が現代に甦る時、何が起こるのか？コマチの真の姿とは？",
+      sceneImage: "https://picsum.photos/400/200?random=103", 
+      sceneAlt: "湯沢市の美しい古い街並み、伝統的な骨董品店の佇まい、平安の雅な文化が香る空間",
+      characterImage: "https://picsum.photos/150/150?random=203",
+      characterAlt: "コマチの肖像、平安美人の気品を纏い、古典的な美しさと現代的な輝きを併せ持つ女性"
     },
     {
       id: 4,
-      icon: '🏮',
-      title: '秋田編 - 稲庭うどんと竿燈祭り',
-      description: '事業承継で悩む親子の物語。伝統技術と革新的発想の融合で、新たな可能性を見つける。',
-      tags: ['事業承継', '親子', '技術革新'],
-      detail: '稲庭うどん職人のイナニワと、竿燈祭りに熱中する息子カントの親子関係に焦点を当てます。カントは新技「足竿燈」に挑戦しますが、行き詰まりを感じていました。父親の稲庭うどんの手ぬい技術との融合により大技を完成させ、世代間の理解と技術の継承を実現します。伝統の継承と革新の創造の両立を描いた心温まる物語です。',
-      imageRandom: 24
+      number: "第四章",
+      title: "稲庭の技と心",
+      description: "稲庭うどんの老舗「令和耕助」で出会った職人親子。父イナニワの伝統への想いと、息子カントの革新への情熱。相容れないと思われた二つの道が交わる時、新たな可能性が生まれる...",
+      teaseText: "伝統と革新、親子の絆の行方は？カントの挑戦が導く未来とは？",
+      sceneImage: "https://picsum.photos/400/200?random=104",
+      sceneAlt: "秋田市の竿燈祭り会場と稲庭うどんの製造風景、伝統技術と祭りの熱気が融合した情景",
+      characterImage: "https://picsum.photos/150/150?random=204", 
+      characterAlt: "イナニワとカントの親子、職人の誇りと若者の情熱が表情に現れた二人の肖像"
     },
     {
       id: 5,
-      icon: '💙',
-      title: '三湖編 - 愛と絆で繋ぐ三湖',
-      description: '田沢湖のタツコと八郎潟のハチロウの恋物語。純粋な愛の力で困難を乗り越える感動的な物語。',
-      tags: ['愛', '自然', '地域協力'],
-      detail: '美しくなろうとして龍の姿になってしまったタツコと、十和田湖から追い出されて落ち込むハチロウの恋物語。南祖坊の妨害工作を乗り越え、純粋な愛の力で田沢湖の氷を溶かします。外見ではなく内面の美しさの重要性、そして地域間の分断を乗り越える連帯の価値を描いた感動的な物語です。',
-      imageRandom: 25
+      number: "第五章",
+      title: "三湖の恋歌",
+      description: "田沢湖で起きた異変。美しい湖が氷に覆われ、その奥で嘆く龍の姿が。タツコの切ない想いと、八郎潟のハチロウとの運命的な出会い。純粋な愛の力が湖に奇跡をもたらすとき...",
+      teaseText: "永遠の愛は氷を溶かすことができるのか？二人の恋の結末は？",
+      sceneImage: "https://picsum.photos/400/200?random=105",
+      sceneAlt: "凍りついた田沢湖の神秘的な光景、氷の下に潜む龍の影と美しくも切ない恋の物語",
+      characterImage: "https://picsum.photos/150/150?random=205",
+      characterAlt: "タツコとハチロウの肖像、龍の姿となった美女と優しい心を持つ男性の運命的な愛"
     },
     {
       id: 6,
-      icon: '🤖',
-      title: '大館編 - サイボーグAI秋田犬アキタ',
-      description: '"酒飲み親父"の真実と、サイボーグ化された秋田犬アキタの復活。技術と伝統の融合。',
-      tags: ['AI', '家族', '技術'],
-      detail: '地元では酒ばかり飲む「ダメ親父」として知られる健太の父・ヒロシの真実が明かされます。元東京の大手メーカーエンジニアだった彼が、愛犬アキタをサイボーグ化して秋田を守る使命を託していました。「一白水成」で復活したアキタとの出会いを通じて、家族の絆と技術と伝統の融合を描きます。',
-      imageRandom: 26
+      number: "第六章", 
+      title: "大館の秘密",
+      description: "健太の実家で発見された驚くべき秘密。酒飲みと思われていた父の真の姿と、最先端技術で甦った忠実な相棒アキタ。家族の絆と、秋田を守る新たな力が明かされるとき...",
+      teaseText: "父の隠された想いとは？アキタが秘める力の正体は？",
+      sceneImage: "https://picsum.photos/400/200?random=106",
+      sceneAlt: "大館市の隠された研究室、最先端技術と伝統的な木造建築が融合した神秘的な空間",
+      characterImage: "https://picsum.photos/150/150?random=206",
+      characterAlt: "サイボーグ化された秋田犬アキタの肖像、忠実な瞳に宿る AI と犬の心の両方を表現"
     },
     {
       id: 7,
-      icon: '🍲',
-      title: '鹿角編 - きりたんぽ大戦争',
-      description: 'トリオとタンポの対立から協力へ。秋田県全体の統一と、分裂から統合への転換を描く。',
-      tags: ['統合', '協力', '秋田ブランド'],
-      detail: '比内地鶏の擬人化キャラ・トリオと、きりたんぽの化身・タンポが激しく対立していた鹿角市。南祖坊の工作により分裂していた彼らが、究極の料理対決を通じて協力の価値を発見します。秋田の食材が組み合わさることで生まれる相乗効果を実感し、県全体の統合と「秋田ブランド」の強力さを実現する物語です。',
-      imageRandom: 27
+      number: "第七章",
+      title: "鹿角の大団円",
+      description: "ついに明かされる全ての謎。トリオとタンポの激しい対立から始まった最後の試練。秋田の全ての力が結集し、健太と仲間たちが挑む最終決戦。果たして彼らは...",
+      teaseText: "全ての謎が解ける時、健太の選択は？秋田の未来を決める最後の戦いの行方は？",
+      sceneImage: "https://picsum.photos/400/200?random=107", 
+      sceneAlt: "鹿角市の決戦の舞台、全てのキャラクターが集結し運命をかけた最後の戦いに臨む壮大な光景",
+      characterImage: "https://picsum.photos/150/150?random=207",
+      characterAlt: "トリオとタンポの肖像、対立から協力へと変わる比内地鶏ときりたんぽの擬人化キャラクター"
     }
   ];
+
+  const nextPage = () => {
+    if (currentPage < chapters.length - 1) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const prevPage = () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const goToPage = (pageIndex: number) => {
+    setCurrentPage(pageIndex);
+  };
+
+  const currentChapter = chapters[currentPage];
 
   return (
     <StoryContainer id="story-section">
@@ -274,77 +454,84 @@ const StorySection: React.FC = () => {
         物語の軌跡
       </SectionTitle>
 
-      <StoryTimeline>
-        <TimelineTrack />
-        {chapters.map((chapter, index) => (
-          <ChapterCard
-            key={chapter.id}
-            $isActive={activeChapter === chapter.id}
-            $side={index % 2 === 0 ? 'left' : 'right'}
-            initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: index * 0.2 }}
-            viewport={{ once: true }}
+      <BookContainer
+        initial={{ opacity: 0, scale: 0.9 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 1 }}
+        viewport={{ once: true }}
+      >
+        <PageContainer>
+          <BookSpine />
+          
+          <Page 
+            $isLeft={true}
+            key={`left-${currentPage}`}
+            initial={{ rotateY: -15, opacity: 0 }}
+            animate={{ rotateY: 0, opacity: 1 }}
+            exit={{ rotateY: 15, opacity: 0 }}
+            transition={{ duration: 0.6, ease: "easeInOut" }}
           >
-            <ChapterIcon
-              whileHover={{ scale: 1.1, rotate: 5 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              {chapter.icon}
-            </ChapterIcon>
-            
-            <ChapterContent
-              $side={index % 2 === 0 ? 'left' : 'right'}
-              onClick={() => setActiveChapter(chapter.id)}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <ChapterImage
-                src={`https://picsum.photos/400/200?random=${chapter.imageRandom}`}
-                alt={`KITAZUNA's ${chapter.title}の物語シーン - 日本の秋田県を舞台にした${chapter.id === 1 ? '新幹線で秋田に向かう主人公の旅路、現代日本の交通インフラと地方への想いを表現した画像' : chapter.id === 2 ? '男鹿半島の神秘的なナマハゲ神社と伝統的な祭りの風景、日本の民俗文化と性別を超えた精神性を表現' : chapter.id === 3 ? '湯沢市の美しい古い街並みとSNSを使う現代的な若者、日本の伝統と現代技術の融合を表現' : chapter.id === 4 ? '秋田市の竿燈祭りと稲庭うどん製造の職人技、日本の伝統技術と世代継承をテーマにした画像' : chapter.id === 5 ? '田沢湖・八郎潟・十和田湖の美しい自然風景、日本の自然保護と環境問題への取り組みを表現' : '大館市の秋田犬と人間の絆、日本の動物愛護精神と国際的な文化交流を表現'}した物語ビジュアル`}
-                loading="lazy"
-              />
-              <ChapterTitle>{chapter.title}</ChapterTitle>
-              <ChapterDescription>{chapter.description}</ChapterDescription>
-              <ChapterTags>
-                {chapter.tags.map((tag, tagIndex) => (
-                  <Tag key={tagIndex}>{tag}</Tag>
-                ))}
-              </ChapterTags>
-            </ChapterContent>
-          </ChapterCard>
-        ))}
-      </StoryTimeline>
+            <ChapterNumber>{currentChapter.number}</ChapterNumber>
+            <ChapterTitle>{currentChapter.title}</ChapterTitle>
+            <ChapterDescription>{currentChapter.description}</ChapterDescription>
+            <TeaseText>{currentChapter.teaseText}</TeaseText>
+          </Page>
 
-      <AnimatePresence>
-        {activeChapter && (
-          <DetailModal
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setActiveChapter(null)}
+          <Page 
+            $isLeft={false}
+            key={`right-${currentPage}`}
+            initial={{ rotateY: 15, opacity: 0 }}
+            animate={{ rotateY: 0, opacity: 1 }}
+            exit={{ rotateY: -15, opacity: 0 }}
+            transition={{ duration: 0.6, ease: "easeInOut", delay: 0.1 }}
           >
-            <ModalContent
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <CloseButton onClick={() => setActiveChapter(null)}>✕</CloseButton>
-              {chapters.find(c => c.id === activeChapter) && (
-                <>
-                  <h2 style={{ color: '#4ecdc4', marginBottom: '1rem' }}>
-                    {chapters.find(c => c.id === activeChapter)?.title}
-                  </h2>
-                  <p style={{ lineHeight: 1.8, color: '#e0e0e0' }}>
-                    {chapters.find(c => c.id === activeChapter)?.detail}
-                  </p>
-                </>
-              )}
-            </ModalContent>
-          </DetailModal>
-        )}
-      </AnimatePresence>
+            <ChapterImage 
+              src={currentChapter.sceneImage}
+              alt={currentChapter.sceneAlt}
+              loading="lazy"
+            />
+            <CharacterPortrait
+              src={currentChapter.characterImage} 
+              alt={currentChapter.characterAlt}
+              loading="lazy"
+            />
+          </Page>
+        </PageContainer>
+
+        <NavigationContainer>
+          <NavButton
+            $direction="prev"
+            onClick={prevPage}
+            disabled={currentPage === 0}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            ←
+          </NavButton>
+
+          <PageIndicator>
+            {chapters.map((_, index) => (
+              <PageDot
+                key={index}
+                $isActive={index === currentPage}
+                onClick={() => goToPage(index)}
+                whileHover={{ scale: 1.2 }}
+                whileTap={{ scale: 0.9 }}
+              />
+            ))}
+          </PageIndicator>
+
+          <NavButton
+            $direction="next" 
+            onClick={nextPage}
+            disabled={currentPage === chapters.length - 1}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            →
+          </NavButton>
+        </NavigationContainer>
+      </BookContainer>
     </StoryContainer>
   );
 };

@@ -357,8 +357,7 @@ const HeroSection: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 1.4 }}
         >
-          伝統と現代が交差する秋田県を舞台に<br />
-          内向的な青年・健太が仲間たちと共に巡る感動のRPG
+          伝統と現代が交差する秋田県を舞台にKitazuna'sと共に巡るローカルスペクタクルストーリー
         </Subtitle>
         
         <CTAButton
