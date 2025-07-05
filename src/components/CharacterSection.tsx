@@ -7,7 +7,7 @@ const sparkle = keyframes`
   50% { transform: scale(1.2) rotate(180deg); opacity: 1; }
 `;
 
-const float = keyframes`
+const cardFloat = keyframes`
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(-10px); }
 `;
@@ -101,7 +101,7 @@ const PokemonCard = styled(motion.div)<{ $position: 'left' | 'center' | 'right' 
           left: 50%;
           transform: translateX(-50%) scale(1.1);
           z-index: 3;
-          animation: ${float} 3s ease-in-out infinite;
+          animation: ${cardFloat} 3s ease-in-out infinite;
         `;
       case 'right':
         return `
