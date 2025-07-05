@@ -14,13 +14,17 @@ const shimmer = keyframes`
 
 const StoryContainer = styled.section`
   min-height: 100vh;
-  padding: 5rem 2rem;
+  padding: 3rem 2rem;
   background: 
     radial-gradient(ellipse at top, rgba(139, 69, 19, 0.1) 0%, transparent 50%),
     linear-gradient(135deg, #2c1810 0%, #1a0f0a 100%);
   color: #8b4513;
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
   &::before {
     content: '';
@@ -37,9 +41,9 @@ const StoryContainer = styled.section`
 `;
 
 const SectionTitle = styled(motion.h2)`
-  font-size: 3.5rem;
+  font-size: 3rem;
   text-align: center;
-  margin-bottom: 4rem;
+  margin-bottom: 2rem;
   font-family: 'Cinzel', serif;
   background: linear-gradient(45deg, #d4af37, #b8860b, #cd853f);
   background-clip: text;
@@ -47,26 +51,73 @@ const SectionTitle = styled(motion.h2)`
   -webkit-text-fill-color: transparent;
   text-shadow: 2px 2px 4px rgba(139, 69, 19, 0.3);
   position: relative;
+  z-index: 10;
   
   &::after {
     content: '✦ ◆ ✦';
     display: block;
-    font-size: 1.5rem;
-    margin-top: 1rem;
+    font-size: 1.2rem;
+    margin-top: 0.5rem;
     color: #cd853f;
     opacity: 0.7;
   }
   
   @media (max-width: 768px) {
-    font-size: 2.5rem;
+    font-size: 2rem;
   }
 `;
 
 const BookContainer = styled(motion.div)`
-  max-width: 1200px;
+  max-width: 900px;
+  width: 100%;
   margin: 0 auto;
   position: relative;
-  perspective: 1000px;
+  perspective: 1500px;
+  z-index: 5;
+`;
+
+const BookCover = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(145deg, #8b4513, #654321);
+  border-radius: 15px;
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.4),
+    inset 0 2px 10px rgba(255, 255, 255, 0.1);
+  z-index: 1;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    bottom: 20px;
+    border: 2px solid #d4af37;
+    border-radius: 10px;
+    box-shadow: inset 0 0 20px rgba(212, 175, 55, 0.3);
+  }
+  
+  &::after {
+    content: '物語の軌跡';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2.5rem;
+    font-family: 'Cinzel', serif;
+    color: #d4af37;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+  }
+  
+  @media (max-width: 768px) {
+    &::after {
+      font-size: 1.8rem;
+    }
+  }
 `;
 
 const BookSpine = styled.div`
@@ -74,24 +125,26 @@ const BookSpine = styled.div`
   left: 50%;
   top: 0;
   bottom: 0;
-  width: 4px;
-  background: linear-gradient(180deg, #8b4513, #654321);
+  width: 8px;
+  background: linear-gradient(180deg, #654321, #3d2817);
   transform: translateX(-50%);
   z-index: 10;
+  border-radius: 4px;
   box-shadow: 
-    -2px 0 4px rgba(0, 0, 0, 0.3),
-    2px 0 4px rgba(0, 0, 0, 0.3);
+    -3px 0 6px rgba(0, 0, 0, 0.4),
+    3px 0 6px rgba(0, 0, 0, 0.4);
 `;
 
 const PageContainer = styled(motion.div)`
   position: relative;
   width: 100%;
-  height: 600px;
+  height: 500px;
   margin: 0 auto;
   transform-style: preserve-3d;
+  z-index: 5;
   
   @media (max-width: 768px) {
-    height: 500px;
+    height: 400px;
   }
 `;
 
@@ -101,16 +154,17 @@ const Page = styled(motion.div)<{ $isLeft?: boolean }>`
   height: 100%;
   ${props => props.$isLeft ? 'left: 0;' : 'right: 0;'}
   background: 
-    linear-gradient(135deg, #f4f1e8 0%, #ede5d3 50%, #e6dcc7 100%);
-  border: 3px solid #d4af37;
-  border-radius: ${props => props.$isLeft ? '15px 5px 5px 15px' : '5px 15px 15px 5px'};
-  padding: 2rem;
+    linear-gradient(135deg, #faf8f2 0%, #f4f1e8 50%, #ede5d3 100%);
+  border: 2px solid #d4af37;
+  border-radius: ${props => props.$isLeft ? '12px 3px 3px 12px' : '3px 12px 12px 3px'};
+  padding: 1.5rem;
   box-shadow: 
     ${props => props.$isLeft ? 
-      'inset -5px 0 10px rgba(139, 69, 19, 0.1), -5px 5px 15px rgba(0, 0, 0, 0.2)' : 
-      'inset 5px 0 10px rgba(139, 69, 19, 0.1), 5px 5px 15px rgba(0, 0, 0, 0.2)'
+      'inset -3px 0 8px rgba(139, 69, 19, 0.1), -3px 3px 10px rgba(0, 0, 0, 0.2)' : 
+      'inset 3px 0 8px rgba(139, 69, 19, 0.1), 3px 3px 10px rgba(0, 0, 0, 0.2)'
     };
   overflow: hidden;
+  transform-origin: ${props => props.$isLeft ? 'right center' : 'left center'};
   
   &::before {
     content: '';
@@ -122,17 +176,17 @@ const Page = styled(motion.div)<{ $isLeft?: boolean }>`
     background-image: 
       radial-gradient(circle at 30% 20%, rgba(139, 69, 19, 0.05) 0%, transparent 20%),
       radial-gradient(circle at 70% 80%, rgba(139, 69, 19, 0.03) 0%, transparent 15%),
-      linear-gradient(45deg, transparent 49%, rgba(139, 69, 19, 0.02) 50%, transparent 51%);
+      repeating-linear-gradient(90deg, transparent, transparent 24px, rgba(139, 69, 19, 0.05) 25px);
     pointer-events: none;
   }
   
   &::after {
     content: '';
     position: absolute;
-    top: 20px;
-    left: 20px;
-    right: 20px;
-    bottom: 20px;
+    top: 15px;
+    left: 15px;
+    right: 15px;
+    bottom: 15px;
     border: 1px solid rgba(139, 69, 19, 0.2);
     border-radius: 5px;
     pointer-events: none;
@@ -141,26 +195,26 @@ const Page = styled(motion.div)<{ $isLeft?: boolean }>`
   @media (max-width: 768px) {
     width: 100%;
     ${props => props.$isLeft ? 'right: 0; left: auto;' : ''}
-    border-radius: 15px;
-    margin-bottom: ${props => props.$isLeft ? '2rem' : '0'};
-    height: ${props => props.$isLeft ? '45%' : '45%'};
+    border-radius: 12px;
+    margin-bottom: ${props => props.$isLeft ? '1.5rem' : '0'};
+    height: ${props => props.$isLeft ? '48%' : '48%'};
     ${props => props.$isLeft ? 'top: 0;' : 'bottom: 0;'}
   }
 `;
 
 const ChapterNumber = styled.div`
-  font-size: 4rem;
+  font-size: 2.5rem;
   font-family: 'Cinzel', serif;
   color: #cd853f;
   text-align: center;
-  margin-bottom: 1rem;
+  margin-bottom: 0.8rem;
   text-shadow: 2px 2px 4px rgba(139, 69, 19, 0.3);
   position: relative;
   
   &::before {
     content: '〜';
     position: absolute;
-    left: -2rem;
+    left: -1.5rem;
     top: 50%;
     transform: translateY(-50%);
   }
@@ -168,124 +222,149 @@ const ChapterNumber = styled.div`
   &::after {
     content: '〜';
     position: absolute;
-    right: -2rem;
+    right: -1.5rem;
     top: 50%;
     transform: translateY(-50%);
+  }
+  
+  @media (max-width: 768px) {
+    font-size: 2rem;
   }
 `;
 
 const ChapterTitle = styled.h3`
-  font-size: 1.8rem;
+  font-size: 1.4rem;
   color: #8b4513;
   text-align: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   font-family: 'Cinzel', serif;
   position: relative;
   
   &::after {
     content: '';
     position: absolute;
-    bottom: -10px;
+    bottom: -8px;
     left: 50%;
     transform: translateX(-50%);
-    width: 100px;
+    width: 80px;
     height: 2px;
     background: linear-gradient(90deg, transparent, #cd853f, transparent);
   }
   
   @media (max-width: 768px) {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
   }
 `;
 
 const ChapterDescription = styled.p`
-  font-size: 1.1rem;
-  line-height: 1.8;
+  font-size: 0.95rem;
+  line-height: 1.7;
   color: #654321;
   text-align: justify;
   font-family: 'Crimson Text', serif;
   position: relative;
+  margin-bottom: 1rem;
   
   &::first-letter {
     float: left;
-    font-size: 4rem;
-    line-height: 3rem;
-    padding-right: 8px;
-    margin-top: 4px;
+    font-size: 3rem;
+    line-height: 2.5rem;
+    padding-right: 6px;
+    margin-top: 2px;
     font-family: 'Cinzel', serif;
     color: #cd853f;
     text-shadow: 2px 2px 4px rgba(139, 69, 19, 0.3);
   }
   
   @media (max-width: 768px) {
-    font-size: 1rem;
+    font-size: 0.85rem;
     
     &::first-letter {
-      font-size: 3rem;
-      line-height: 2.5rem;
+      font-size: 2.5rem;
+      line-height: 2rem;
     }
   }
 `;
 
 const TeaseText = styled.div`
-  margin-top: 1.5rem;
-  padding: 1rem;
+  margin-top: 1rem;
+  padding: 0.8rem;
   background: rgba(212, 175, 55, 0.1);
-  border-left: 4px solid #cd853f;
+  border-left: 3px solid #cd853f;
   font-style: italic;
   color: #8b4513;
   border-radius: 0 5px 5px 0;
+  font-size: 0.9rem;
   
   &::before {
     content: '"';
-    font-size: 2rem;
+    font-size: 1.5rem;
     color: #cd853f;
     font-family: 'Cinzel', serif;
     float: left;
     line-height: 1;
-    margin-right: 5px;
+    margin-right: 4px;
   }
   
   &::after {
     content: '"';
-    font-size: 2rem;
+    font-size: 1.5rem;
     color: #cd853f;
     font-family: 'Cinzel', serif;
     float: right;
     line-height: 1;
-    margin-left: 5px;
+    margin-left: 4px;
+  }
+  
+  @media (max-width: 768px) {
+    font-size: 0.8rem;
+    
+    &::before, &::after {
+      font-size: 1.2rem;
+    }
   }
 `;
 
 const ChapterImage = styled.img`
   width: 100%;
-  height: 200px;
+  height: 150px;
   object-fit: cover;
-  border-radius: 10px;
-  border: 3px solid #d4af37;
-  box-shadow: 0 5px 15px rgba(139, 69, 19, 0.3);
-  margin-bottom: 1rem;
+  border-radius: 8px;
+  border: 2px solid #d4af37;
+  box-shadow: 0 4px 10px rgba(139, 69, 19, 0.3);
+  margin-bottom: 0.8rem;
   filter: sepia(20%) contrast(1.1);
+  
+  @media (max-width: 768px) {
+    height: 120px;
+  }
 `;
 
 const CharacterPortrait = styled.img`
-  width: 150px;
-  height: 150px;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
-  border: 4px solid #cd853f;
+  border: 3px solid #cd853f;
   object-fit: cover;
-  margin: 1rem auto;
+  margin: 0.8rem auto;
   display: block;
-  box-shadow: 0 8px 16px rgba(139, 69, 19, 0.4);
+  box-shadow: 0 6px 12px rgba(139, 69, 19, 0.4);
   filter: sepia(10%);
+  
+  @media (max-width: 768px) {
+    width: 100px;
+    height: 100px;
+  }
 `;
 
 const NavigationContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 2rem;
-  margin-top: 3rem;
+  gap: 1.5rem;
+  margin-top: 2rem;
+  z-index: 10;
+  position: relative;
 `;
 
 const NavButton = styled(motion.button)<{ $direction: 'prev' | 'next' }>`
@@ -461,41 +540,44 @@ const StorySection: React.FC = () => {
         viewport={{ once: true }}
       >
         <PageContainer>
+          <BookCover />
           <BookSpine />
           
-          <Page 
-            $isLeft={true}
-            key={`left-${currentPage}`}
-            initial={{ rotateY: -15, opacity: 0 }}
-            animate={{ rotateY: 0, opacity: 1 }}
-            exit={{ rotateY: 15, opacity: 0 }}
-            transition={{ duration: 0.6, ease: "easeInOut" }}
-          >
-            <ChapterNumber>{currentChapter.number}</ChapterNumber>
-            <ChapterTitle>{currentChapter.title}</ChapterTitle>
-            <ChapterDescription>{currentChapter.description}</ChapterDescription>
-            <TeaseText>{currentChapter.teaseText}</TeaseText>
-          </Page>
+          <AnimatePresence mode="wait">
+            <Page 
+              $isLeft={true}
+              key={`left-${currentPage}`}
+              initial={{ rotateY: -25, opacity: 0 }}
+              animate={{ rotateY: 0, opacity: 1 }}
+              exit={{ rotateY: 25, opacity: 0 }}
+              transition={{ duration: 0.8, ease: "easeInOut" }}
+            >
+              <ChapterNumber>{currentChapter.number}</ChapterNumber>
+              <ChapterTitle>{currentChapter.title}</ChapterTitle>
+              <ChapterDescription>{currentChapter.description}</ChapterDescription>
+              <TeaseText>{currentChapter.teaseText}</TeaseText>
+            </Page>
 
-          <Page 
-            $isLeft={false}
-            key={`right-${currentPage}`}
-            initial={{ rotateY: 15, opacity: 0 }}
-            animate={{ rotateY: 0, opacity: 1 }}
-            exit={{ rotateY: -15, opacity: 0 }}
-            transition={{ duration: 0.6, ease: "easeInOut", delay: 0.1 }}
-          >
-            <ChapterImage 
-              src={currentChapter.sceneImage}
-              alt={currentChapter.sceneAlt}
-              loading="lazy"
-            />
-            <CharacterPortrait
-              src={currentChapter.characterImage} 
-              alt={currentChapter.characterAlt}
-              loading="lazy"
-            />
-          </Page>
+            <Page 
+              $isLeft={false}
+              key={`right-${currentPage}`}
+              initial={{ rotateY: 25, opacity: 0 }}
+              animate={{ rotateY: 0, opacity: 1 }}
+              exit={{ rotateY: -25, opacity: 0 }}
+              transition={{ duration: 0.8, ease: "easeInOut", delay: 0.1 }}
+            >
+              <ChapterImage 
+                src={currentChapter.sceneImage}
+                alt={currentChapter.sceneAlt}
+                loading="lazy"
+              />
+              <CharacterPortrait
+                src={currentChapter.characterImage} 
+                alt={currentChapter.characterAlt}
+                loading="lazy"
+              />
+            </Page>
+          </AnimatePresence>
         </PageContainer>
 
         <NavigationContainer>
