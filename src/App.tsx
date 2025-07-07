@@ -1,11 +1,16 @@
 import React from 'react';
 import styled, { createGlobalStyle, keyframes } from 'styled-components';
 import HeroSection from './components/HeroSection';
-import GameSection from './components/GameSection';
-import CharacterSection from './components/CharacterSection';
-import ECSection from './components/ECSection';
+// import GameSection from './components/GameSection';
+import GameSection from './components/GameSectionSimple';
+// import CharacterSection from './components/CharacterSection';
+// import CharacterSection from './components/CharacterSectionSimple';
+import CharacterSection from './components/CharacterSectionSlider';
+// import TeamSection from './components/TeamSection';
+// import ECSection from './components/ECSection';
+import ECSection from './components/ECSectionSimple';
 import StorySection from './components/StorySection';
-import CreatorSection from './components/CreatorSection';
+import ProjectVisionSection from './components/ProjectVisionSection';
 import Footer from './components/Footer';
 
 const GlobalStyle = createGlobalStyle`
@@ -120,7 +125,7 @@ function App() {
         <CharacterSection />
         <GameSection />
         <ECSection />
-        <CreatorSection />
+        <ProjectVisionSection />
         <Footer />
       </MainContent>
     </AppContainer>

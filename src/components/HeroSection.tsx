@@ -367,7 +367,7 @@ const HeroSection: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 1.4 }}
         >
-          伝統と現代が交差する秋田県を舞台に杉野健太が秋田名物Kitazuna'sとのたちとの一大スペクタクル！
+          伝統と現代が交差する秋田県の物語
         </Subtitle>
         
         <CTAButton

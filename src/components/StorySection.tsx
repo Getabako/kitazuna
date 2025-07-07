@@ -16,9 +16,19 @@ const StoryContainer = styled.section`
   min-height: 100vh;
   padding: 3rem 2rem;
   background: 
-    radial-gradient(ellipse at top, rgba(139, 69, 19, 0.1) 0%, transparent 50%),
-    linear-gradient(135deg, #2c1810 0%, #1a0f0a 100%);
-  color: #8b4513;
+    radial-gradient(ellipse 500px 300px at 30% 20%, rgba(92, 51, 23, 0.4) 0%, transparent 60%),
+    radial-gradient(ellipse 400px 200px at 70% 80%, rgba(61, 35, 14, 0.3) 0%, transparent 50%),
+    repeating-linear-gradient(90deg, 
+      #3D230E 0px, 
+      #5C3317 8px, 
+      #4A2C17 16px,
+      #6B3E1A 24px,
+      #3D230E 32px,
+      #4F2F1A 40px
+    ),
+    linear-gradient(180deg, #2D1B0E 0%, #1A0F08 100%);
+  background-size: 100% 100%, 100% 100%, 120px 120px, 100% 100%;
+  color: #F4E5D3;
   position: relative;
   overflow: hidden;
   display: flex;
@@ -34,9 +44,47 @@ const StoryContainer = styled.section`
     right: 0;
     bottom: 0;
     background-image: 
-      radial-gradient(circle at 20% 80%, rgba(139, 69, 19, 0.1) 0%, transparent 30%),
-      radial-gradient(circle at 80% 20%, rgba(139, 69, 19, 0.05) 0%, transparent 30%);
+      radial-gradient(ellipse 180px 60px at 15% 25%, rgba(61, 35, 14, 0.6) 0%, transparent 70%),
+      radial-gradient(ellipse 120px 40px at 85% 45%, rgba(75, 44, 23, 0.5) 0%, transparent 70%),
+      radial-gradient(ellipse 200px 80px at 45% 70%, rgba(55, 31, 16, 0.4) 0%, transparent 70%),
+      radial-gradient(ellipse 150px 50px at 75% 15%, rgba(107, 62, 26, 0.3) 0%, transparent 70%),
+      repeating-linear-gradient(2deg,
+        transparent 0px, transparent 2px,
+        rgba(61, 35, 14, 0.2) 2px, rgba(61, 35, 14, 0.2) 3px,
+        transparent 3px, transparent 8px
+      ),
+      repeating-linear-gradient(178deg,
+        transparent 0px, transparent 1px,
+        rgba(75, 44, 23, 0.15) 1px, rgba(75, 44, 23, 0.15) 2px,
+        transparent 2px, transparent 12px
+      );
     pointer-events: none;
+    opacity: 0.8;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      repeating-linear-gradient(89deg,
+        transparent 0px, transparent 15px,
+        rgba(45, 27, 14, 0.3) 15px, rgba(45, 27, 14, 0.3) 18px,
+        transparent 18px, transparent 35px
+      ),
+      repeating-linear-gradient(91deg,
+        transparent 0px, transparent 25px,
+        rgba(55, 31, 16, 0.2) 25px, rgba(55, 31, 16, 0.2) 27px,
+        transparent 27px, transparent 50px
+      ),
+      radial-gradient(circle 3px at 20% 30%, rgba(26, 15, 8, 0.8) 0%, transparent 100%),
+      radial-gradient(circle 2px at 60% 60%, rgba(26, 15, 8, 0.6) 0%, transparent 100%),
+      radial-gradient(circle 4px at 80% 20%, rgba(26, 15, 8, 0.7) 0%, transparent 100%);
+    pointer-events: none;
+    opacity: 0.6;
   }
 `;
 
@@ -45,13 +93,16 @@ const SectionTitle = styled(motion.h2)`
   text-align: center;
   margin-bottom: 2rem;
   font-family: 'Cinzel', serif;
-  background: linear-gradient(45deg, #d4af37, #b8860b, #cd853f);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 2px 2px 4px rgba(139, 69, 19, 0.3);
+  color: #d4af37;
+  text-shadow: 
+    -0.5px -0.5px 0 #f4e5d3,
+    0.5px -0.5px 0 #f4e5d3,
+    -0.5px 0.5px 0 #f4e5d3,
+    0.5px 0.5px 0 #f4e5d3,
+    2px 2px 6px rgba(26, 15, 8, 0.6);
   position: relative;
   z-index: 10;
+  font-weight: bold;
   
   &::after {
     content: '✦ ◆ ✦';
@@ -59,7 +110,13 @@ const SectionTitle = styled(motion.h2)`
     font-size: 1.2rem;
     margin-top: 0.5rem;
     color: #cd853f;
-    opacity: 0.7;
+    opacity: 0.8;
+    text-shadow: 
+      -0.5px -0.5px 0 #f4e5d3,
+      0.5px -0.5px 0 #f4e5d3,
+      -0.5px 0.5px 0 #f4e5d3,
+      0.5px 0.5px 0 #f4e5d3,
+      1px 1px 3px rgba(26, 15, 8, 0.5);
   }
   
   @media (max-width: 768px) {
@@ -330,33 +387,53 @@ const TeaseText = styled.div`
 
 const ChapterImage = styled.img`
   width: 100%;
-  height: 150px;
+  aspect-ratio: 16 / 9;
   object-fit: cover;
   border-radius: 8px;
   border: 2px solid #d4af37;
   box-shadow: 0 4px 10px rgba(139, 69, 19, 0.3);
   margin-bottom: 0.8rem;
   filter: sepia(20%) contrast(1.1);
-  
-  @media (max-width: 768px) {
-    height: 120px;
-  }
 `;
 
-const CharacterPortrait = styled.img`
-  width: 120px;
-  height: 120px;
+const CharacterPortraitContainer = styled.div<{ $chapterIndex: number }>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin: 0.8rem auto;
+  
+  ${props => (props.$chapterIndex === 3 || props.$chapterIndex === 4 || props.$chapterIndex === 6 || props.$chapterIndex === 7) && `
+    gap: 0.5rem;
+  `}
+`;
+
+const CharacterPortrait = styled.img<{ $chapterIndex: number, $isSecond?: boolean }>`
+  width: ${props => (props.$chapterIndex === 3 || props.$chapterIndex === 4 || props.$chapterIndex === 6 || props.$chapterIndex === 7) ? '100px' : '120px'};
+  height: ${props => (props.$chapterIndex === 3 || props.$chapterIndex === 4 || props.$chapterIndex === 6 || props.$chapterIndex === 7) ? '100px' : '120px'};
   border-radius: 50%;
   border: 3px solid #cd853f;
   object-fit: cover;
-  margin: 0.8rem auto;
-  display: block;
   box-shadow: 0 6px 12px rgba(139, 69, 19, 0.4);
   filter: sepia(10%);
+  background: ${props => {
+    if (props.$chapterIndex === 0) return 'linear-gradient(135deg, #4A90E2 0%, #7BB3F0 100%)'; // 健太 - blue
+    if (props.$chapterIndex === 1) return 'linear-gradient(135deg, #E74C3C 0%, #F39C12 100%)'; // ナギサ - red/orange
+    if (props.$chapterIndex === 2) return 'linear-gradient(135deg, #E91E63 0%, #9C27B0 100%)'; // コマチ - pink/purple
+    if (props.$chapterIndex === 3 && !props.$isSecond) return 'linear-gradient(135deg, #8D6E63 0%, #D4AF37 100%)'; // イナニワ - brown/gold
+    if (props.$chapterIndex === 3 && props.$isSecond) return 'linear-gradient(135deg, #607D8B 0%, #42A5F5 100%)'; // カント - silver/blue
+    if (props.$chapterIndex === 4 && !props.$isSecond) return 'linear-gradient(135deg, #26C6DA 0%, #4FC3F7 100%)'; // タツコ - aqua
+    if (props.$chapterIndex === 4 && props.$isSecond) return 'linear-gradient(135deg, #29B6F6 0%, #1976D2 100%)'; // ハチロウ - blue
+    if (props.$chapterIndex === 5) return 'linear-gradient(135deg, #90A4AE 0%, #42A5F5 100%)'; // アキタ - metallic/blue
+    if (props.$chapterIndex === 6 && !props.$isSecond) return 'linear-gradient(135deg, #FF5722 0%, #FF8A65 100%)'; // トリオ - orange/red
+    if (props.$chapterIndex === 6 && props.$isSecond) return 'linear-gradient(135deg, #FFC107 0%, #FFD54F 100%)'; // タンポ - golden
+    if (props.$chapterIndex === 7) return 'linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%)'; // スギノオウ - green
+    return 'linear-gradient(135deg, #90A4AE 0%, #ECEFF1 100%)'; // default
+  }};
   
   @media (max-width: 768px) {
-    width: 100px;
-    height: 100px;
+    width: ${props => (props.$chapterIndex === 3 || props.$chapterIndex === 4 || props.$chapterIndex === 6 || props.$chapterIndex === 7) ? '80px' : '100px'};
+    height: ${props => (props.$chapterIndex === 3 || props.$chapterIndex === 4 || props.$chapterIndex === 6 || props.$chapterIndex === 7) ? '80px' : '100px'};
   }
 `;
 
@@ -430,7 +507,7 @@ const StorySection: React.FC = () => {
   const chapters = [
     {
       id: 1,
-      number: "第一章",
+      number: "プロローグ",
       title: "新幹線での邂逅",
       description: "平凡な大学生・杉野健太が、祖父からの謎めいた依頼を受けて秋田へと向かう。車窓に流れる風景を眺めながら、彼はまだ知らない。この旅が、自分の人生を大きく変える冒険の始まりであることを...",
       teaseText: "果たして健太を待ち受ける運命とは？この旅の真の目的とは何なのか？",
@@ -441,7 +518,7 @@ const StorySection: React.FC = () => {
     },
     {
       id: 2,
-      number: "第二章", 
+      number: "第一章", 
       title: "男鹿の守護霊",
       description: "男鹿半島で出会った勇敢な少女ナギサ。彼女には秘められた願いがあった。古くからの伝統に挑戦する彼女の姿に、健太は心を揺さぶられる。神秘的なナマハゲの祠で、二人が目にしたものとは...",
       teaseText: "伝統の壁を越えて、ナギサの願いは叶うのか？祠に隠された秘密とは？",
@@ -452,7 +529,7 @@ const StorySection: React.FC = () => {
     },
     {
       id: 3,
-      number: "第三章",
+      number: "第二章",
       title: "湯沢の雅な出会い",
       description: "骨董品店で出会った謎めいた美女コマチ。平安時代から続く美の知識を持つ彼女は、現代社会で孤独を感じていた。しかし、ナギサの提案により、古き良きものと新しい技術が織りなす奇跡が...",
       teaseText: "千年の美意識が現代に甦る時、何が起こるのか？コマチの真の姿とは？",
@@ -463,7 +540,7 @@ const StorySection: React.FC = () => {
     },
     {
       id: 4,
-      number: "第四章",
+      number: "第三章",
       title: "稲庭の技と心",
       description: "稲庭うどんの老舗「令和耕助」で出会った職人親子。父イナニワの伝統への想いと、息子カントの革新への情熱。相容れないと思われた二つの道が交わる時、新たな可能性が生まれる...",
       teaseText: "伝統と革新、親子の絆の行方は？カントの挑戦が導く未来とは？",
@@ -474,7 +551,7 @@ const StorySection: React.FC = () => {
     },
     {
       id: 5,
-      number: "第五章",
+      number: "第四章",
       title: "三湖の恋歌",
       description: "田沢湖で起きた異変。美しい湖が氷に覆われ、その奥で嘆く龍の姿が。タツコの切ない想いと、八郎潟のハチロウとの運命的な出会い。純粋な愛の力が湖に奇跡をもたらすとき...",
       teaseText: "永遠の愛は氷を溶かすことができるのか？二人の恋の結末は？",
@@ -485,7 +562,7 @@ const StorySection: React.FC = () => {
     },
     {
       id: 6,
-      number: "第六章", 
+      number: "第五章", 
       title: "大館の秘密",
       description: "健太の実家で発見された驚くべき秘密。酒飲みと思われていた父の真の姿と、最先端技術で甦った忠実な相棒アキタ。家族の絆と、秋田を守る新たな力が明かされるとき...",
       teaseText: "父の隠された想いとは？アキタが秘める力の正体は？",
@@ -496,14 +573,25 @@ const StorySection: React.FC = () => {
     },
     {
       id: 7,
-      number: "第七章",
+      number: "第六章",
       title: "鹿角の大団円",
-      description: "ついに明かされる全ての謎。トリオとタンポの激しい対立から始まった最後の試練。秋田の全ての力が結集し、健太と仲間たちが挑む最終決戦。果たして彼らは...",
-      teaseText: "全ての謎が解ける時、健太の選択は？秋田の未来を決める最後の戦いの行方は？",
+      description: "鹿角市で起きた比内地鶏とキリタンポの激しい対立。トリオとタンポの対立を通じて、秋田の分裂した心を統一する必要性が明らかになる。協力することで生まれる相乗効果を学び、秋田全体の絆を深める...",
+      teaseText: "分裂から統一へ、秋田の真の力を結集できるのか？最後の戦いへの準備は整うのか？",
       sceneImage: "https://picsum.photos/400/200?random=107", 
-      sceneAlt: "鹿角市の決戦の舞台、全てのキャラクターが集結し運命をかけた最後の戦いに臨む壮大な光景",
+      sceneAlt: "鹿角市の美しい風景ときりたんぽ鍋を囲む人々、対立から協力へと変わる希望に満ちた光景",
       characterImage: "https://picsum.photos/150/150?random=207",
       characterAlt: "トリオとタンポの肖像、対立から協力へと変わる比内地鶏ときりたんぽの擬人化キャラクター"
+    },
+    {
+      id: 8,
+      number: "最終章",
+      title: "太平山の守護神",
+      description: "ついに姿を現したスギノオウ。秋田県民の過度な真面目さが生んだ巨大な化身との最終決戦。健太と仲間たちは、これまでの旅で学んだ全ての教訓を胸に、太平山の頂でスギノオウと対峙する。破壊ではなく浄化による真の解決を目指して...",
+      teaseText: "真面目さと柔軟性の調和は可能なのか？健太の成長の集大成となる最後の選択とは？",
+      sceneImage: "https://picsum.photos/400/200?random=108",
+      sceneAlt: "太平山の頂上、巨大なスギノオウと対峙する健太と仲間たち、秋田杉の咲誇が立ち上がる壮大な最終決戦の光景",
+      characterImage: "https://picsum.photos/150/150?random=208",
+      characterAlt: "スギノオウの肖像、秋田県民の真面目さが極端に歪んだ巨大な化身、威厳ある姿に宿る複雑な感情"
     }
   ];
 
@@ -569,15 +657,45 @@ const StorySection: React.FC = () => {
                 transition={{ duration: 0.6, ease: "easeInOut" }}
               >
                 <ChapterImage 
-                  src={currentChapter.sceneImage}
+                  src={`/images/story${currentPage}.png`}
                   alt={currentChapter.sceneAlt}
                   loading="lazy"
                 />
-                <CharacterPortrait
-                  src={currentChapter.characterImage} 
-                  alt={currentChapter.characterAlt}
-                  loading="lazy"
-                />
+                <CharacterPortraitContainer $chapterIndex={currentPage}>
+                  {(currentPage === 3 || currentPage === 4 || currentPage === 6 || currentPage === 7) ? (
+                    <>
+                      <CharacterPortrait
+                        $chapterIndex={currentPage}
+                        src={currentPage === 3 ? '/images/dotchara3a.png' :
+                             currentPage === 4 ? '/images/dotchara4a.png' :
+                             currentPage === 6 ? '/images/dotchara6a.png' :
+                             '/images/dotchara7a.png'}
+                        alt={currentChapter.characterAlt}
+                        loading="lazy"
+                      />
+                      <CharacterPortrait
+                        $chapterIndex={currentPage}
+                        $isSecond={true}
+                        src={currentPage === 3 ? '/images/dotchara3b.png' :
+                             currentPage === 4 ? '/images/dotchara4b.png' :
+                             currentPage === 6 ? '/images/dotchara6b.png' :
+                             '/images/dotchara7b.png'}
+                        alt={currentChapter.characterAlt}
+                        loading="lazy"
+                      />
+                    </>
+                  ) : (
+                    <CharacterPortrait
+                      $chapterIndex={currentPage}
+                      src={currentPage === 0 ? '/images/dotchara0.png' :
+                           currentPage === 1 ? '/images/dotchara1.png' :
+                           currentPage === 2 ? '/images/dotchara2.png' :
+                           '/images/dotchara5.png'}
+                      alt={currentChapter.characterAlt}
+                      loading="lazy"
+                    />
+                  )}
+                </CharacterPortraitContainer>
               </Page>
             </motion.div>
           </AnimatePresence>

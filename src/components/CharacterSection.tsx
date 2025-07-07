@@ -585,11 +585,11 @@ const CharacterSection: React.FC = () => {
                 </CardHeader>
                 
                 <CardImageArea $bgColor={character.bgColor}>
-                  <CharacterPortrait
+                  {/* <CharacterPortrait
                     src={`https://picsum.photos/300/200?random=${character.imageRandom}`}
                     alt={`KITAZUNA's ${character.name}`}
                     loading="lazy"
-                  />
+                  /> */}
                   <CharacterEmoji>{character.emoji}</CharacterEmoji>
                 </CardImageArea>
                 
