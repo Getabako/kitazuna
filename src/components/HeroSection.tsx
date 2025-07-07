@@ -50,8 +50,7 @@ const BackgroundImage = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background: url('https://picsum.photos/1920/1080?random=30');
-  background-size: cover;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   background-position: center;
   z-index: 1;
 `;

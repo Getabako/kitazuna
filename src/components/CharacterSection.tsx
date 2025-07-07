@@ -1,16 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
-
-const sparkle = keyframes`
-  0%, 100% { transform: scale(0.8) rotate(0deg); opacity: 0.6; }
-  50% { transform: scale(1.2) rotate(180deg); opacity: 1; }
-`;
-
-const cardFloat = keyframes`
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-`;
 
 const CardShuffleIn = {
   initial: { rotateY: -90, opacity: 0, scale: 0.8, z: -200 },
@@ -101,7 +91,6 @@ const PokemonCard = styled(motion.div)<{ $position: 'left' | 'center' | 'right' 
           left: 50%;
           transform: translateX(-50%) scale(1.1);
           z-index: 3;
-          animation: ${cardFloat} 3s ease-in-out infinite;
         `;
       case 'right':
         return `
@@ -220,7 +209,6 @@ const CharacterEmoji = styled.div`
   z-index: 2;
   font-size: 3.5rem;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-  animation: ${sparkle} 2s ease-in-out infinite;
   
   @media (max-width: 768px) {
     font-size: 2.5rem;

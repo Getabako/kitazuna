@@ -23,6 +23,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# images and videos (already in GitHub)
-public/movies/
+# Images and videos are already uploaded to the remote repository
 public/images/
+public/movies/
+
