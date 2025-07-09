@@ -23,7 +23,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Images and videos are already uploaded to the remote repository
-public/images/
-public/movies/
+# Images and videos - commented out to allow uploading
+# public/images/
+# public/movies/
 
