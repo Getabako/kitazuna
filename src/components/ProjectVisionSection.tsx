@@ -6,7 +6,7 @@ const VisionContainer = styled.section`
   height: 100vh;
   padding: 2rem;
   background: 
-    linear-gradient(135deg, rgba(26, 26, 46, 0.7) 0%, rgba(15, 52, 96, 0.7) 100%),
+    linear-gradient(135deg, rgba(255, 94, 0, 0.7) 0%, rgba(139, 69, 19, 0.7) 100%),
     url('/images/concept.png') center/cover no-repeat;
   color: white;
   position: relative;
@@ -23,7 +23,8 @@ const SectionTitle = styled(motion.h2)`
   font-size: 3rem;
   text-align: center;
   margin-bottom: 2rem;
-  color: #764ba2;
+  color: #ff8c00;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
   flex-shrink: 0;
   
   @media (max-width: 768px) {
@@ -43,11 +44,11 @@ const ContentWrapper = styled.div`
 `;
 
 const VisionSection = styled(motion.div)`
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 140, 0, 0.1);
   padding: 2rem 3rem 3rem 3rem;
   border-radius: 20px;
   margin-bottom: 2rem;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 140, 0, 0.3);
   backdrop-filter: blur(10px);
   position: relative;
   
@@ -59,14 +60,14 @@ const VisionSection = styled(motion.div)`
 
 const VisionTitle = styled.h3`
   font-size: 1.8rem;
-  color: #764ba2;
-  background: rgba(15, 52, 96, 0.9);
+  color: #ffffff;
+  background: rgba(255, 94, 0, 0.9);
   padding: 0.8rem 1.5rem;
   border-radius: 15px;
   position: absolute;
   top: -23px;
   left: 20px;
-  border: 2px solid rgba(118, 75, 162, 0.5);
+  border: 2px solid rgba(255, 140, 0, 0.5);
   backdrop-filter: blur(10px);
   
   @media (max-width: 768px) {
@@ -114,7 +115,7 @@ const TeamSection = styled.div`
 const TeamTitle = styled.h4`
   text-align: center;
   font-size: 1.8rem;
-  color: #4ecdc4;
+  color: #ff8c00;
   margin-bottom: 1.5rem;
   
   @media (max-width: 768px) {
@@ -136,10 +137,10 @@ const TeamScrollTrack = styled.div`
 `;
 
 const TeamCard = styled.div`
-  background: rgba(78, 205, 196, 0.1);
+  background: rgba(255, 140, 0, 0.1);
   padding: 1.2rem;
   border-radius: 12px;
-  border: 1px solid rgba(78, 205, 196, 0.3);
+  border: 1px solid rgba(255, 140, 0, 0.3);
   text-align: center;
   transition: all 0.3s ease;
   min-height: 140px;
@@ -151,7 +152,7 @@ const TeamCard = styled.div`
   margin-right: 1rem;
 
   &:hover {
-    background: rgba(78, 205, 196, 0.15);
+    background: rgba(255, 140, 0, 0.15);
     transform: translateY(-3px);
   }
   
