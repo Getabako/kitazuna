@@ -123,10 +123,7 @@ const GameLogo = styled(motion.div)`
 
 const LogoText = styled.h2`
   font-size: 2rem;
-  background: linear-gradient(45deg, #ffd700, #ff6b6b, #4ecdc4);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #ffd700;
   margin-bottom: 0.5rem;
 `;
 

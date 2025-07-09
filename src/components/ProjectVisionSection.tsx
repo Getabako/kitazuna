@@ -23,10 +23,7 @@ const SectionTitle = styled(motion.h2)`
   font-size: 3rem;
   text-align: center;
   margin-bottom: 2rem;
-  background: linear-gradient(45deg, #667eea, #764ba2);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #764ba2;
   flex-shrink: 0;
   
   @media (max-width: 768px) {
