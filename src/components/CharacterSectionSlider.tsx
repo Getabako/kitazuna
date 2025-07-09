@@ -578,7 +578,7 @@ const CharacterSectionSlider: React.FC = () => {
                 />
               ) : currentIndex === 8 ? (
                 <img 
-                  src="/images/chara8.png"
+                  src="/images/chara9.png"
                   alt={characters[currentIndex].name}
                   style={{
                     width: '250px',
@@ -592,7 +592,7 @@ const CharacterSectionSlider: React.FC = () => {
                 />
               ) : currentIndex === 9 ? (
                 <img 
-                  src="/images/chara9.png"
+                  src="/images/chara8.png"
                   alt={characters[currentIndex].name}
                   style={{
                     width: '250px',
