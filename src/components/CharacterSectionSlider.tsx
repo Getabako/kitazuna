@@ -520,7 +520,7 @@ const CharacterSectionSlider: React.FC = () => {
                 ease: [0.25, 0.46, 0.45, 0.94]
               }}
             >
-              {currentIndex <= 2 ? (
+              {currentIndex <= 4 ? (
                 <img 
                   src={`/images/chara${currentIndex}.png`}
                   alt={characters[currentIndex].name}
